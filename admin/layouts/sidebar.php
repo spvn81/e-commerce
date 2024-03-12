@@ -41,7 +41,7 @@
 
 
           <li class="nav-item">
-            <a href="pages/widgets.html" class="nav-link">
+            <a href="index.php" class="nav-link">
             <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
               Dashboard
@@ -53,10 +53,10 @@
 
 
           <li class="nav-item">
-            <a href="pages/widgets.html" class="nav-link">
+            <a href="categories.php" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
               <p>
-                Widgets
+                Categories
               </p>
             </a>
           </li>

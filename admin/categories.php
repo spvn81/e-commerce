@@ -36,56 +36,50 @@
         <div class="col-md-12">
 
         <div class="card-body">
+          <?php 
+    include('config/conn.php');
+    $category_select ="SELECT * FROM categories";
+    $category_ex = mysqli_query($conn,$category_select);
+    $categories = mysqli_fetch_all($category_ex,MYSQLI_ASSOC);
+
+
+
+        ?>
                 <table class="table table-bordered">
                   <thead>
                     <tr>
-                      <th style="width: 10px">#</th>
-                      <th>Task</th>
-                      <th>Progress</th>
-                      <th style="width: 40px">Label</th>
+                      <th>Id</th>
+                      <th>title</th>
+                      <th>slug</th>
+                      <th>status</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
+                    <?php foreach(   $categories as $category){ ?>
                     <tr>
-                      <td>1.</td>
-                      <td>Update software</td>
-                      <td>
-                        <div class="progress progress-xs">
-                          <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
-                        </div>
-                      </td>
-                      <td><span class="badge bg-danger">55%</span></td>
+                    <td><?= $category['id'] ?></td>
+                    <td><?= $category['title'] ?></td>
+                    <td><?= $category['slug'] ?></td>
+                    <td><?php 
+                        if($category['status']==1){
+                          echo "Active";
+                        }else if($category['status']==2){
+                          echo "In Active";
+
+                        }else{
+                          echo "Not set";
+
+                        }
+                    
+                    
+                    ?></td>
+                    <td>edit|delete</td>
                     </tr>
-                    <tr>
-                      <td>2.</td>
-                      <td>Clean database</td>
-                      <td>
-                        <div class="progress progress-xs">
-                          <div class="progress-bar bg-warning" style="width: 70%"></div>
-                        </div>
-                      </td>
-                      <td><span class="badge bg-warning">70%</span></td>
-                    </tr>
-                    <tr>
-                      <td>3.</td>
-                      <td>Cron job running</td>
-                      <td>
-                        <div class="progress progress-xs progress-striped active">
-                          <div class="progress-bar bg-primary" style="width: 30%"></div>
-                        </div>
-                      </td>
-                      <td><span class="badge bg-primary">30%</span></td>
-                    </tr>
-                    <tr>
-                      <td>4.</td>
-                      <td>Fix and squish bugs</td>
-                      <td>
-                        <div class="progress progress-xs progress-striped active">
-                          <div class="progress-bar bg-success" style="width: 90%"></div>
-                        </div>
-                      </td>
-                      <td><span class="badge bg-success">90%</span></td>
-                    </tr>
+                    <?php } ?>
+          
+             
+               
                   </tbody>
                 </table>
               </div>

@@ -39,8 +39,22 @@ $check_title = trim(strtolower($title));
 $convert_to_slug_array = explode(' ',$check_title);
 $slug = implode('-',$convert_to_slug_array);
 
-$sql_insert_category = "INSERT INTO categories(title,slug,status)VALUES('$title','$slug',$status)";
-mysqli_query($conn,$sql_insert_category);
+$sql_category_select = "SELECT * FROM categories WHERE slug='$slug'";
+$category_ex = mysqli_query($conn,$sql_category_select);
+$category_data = mysqli_fetch_assoc($category_ex);
+
+if(empty($category_data)){
+  $sql_insert_category = "INSERT INTO categories(title,slug,status)VALUES('$title','$slug',$status)";
+  if(mysqli_query($conn,$sql_insert_category)){?>
+  <script>
+    window.location='categories.php';
+  </script>
+
+ <?php  }
+}else{
+  echo "category data already exist";
+}
+
 
 
 }

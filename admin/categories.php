@@ -41,6 +41,14 @@
     $category_select ="SELECT * FROM categories";
     $category_ex = mysqli_query($conn,$category_select);
     $categories = mysqli_fetch_all($category_ex,MYSQLI_ASSOC);
+    if(isset($_GET['delete_category_id'])){
+      $delete_category_id = $_GET['delete_category_id'];
+      $sql_category_delete = "DELETE FROM categories WHERE id='$delete_category_id'";
+      if(mysqli_query($conn,$sql_category_delete)){
+        echo "<script>window.location='categories.php'</script>";
+      }
+
+    }
 
 
 
@@ -74,7 +82,8 @@
                     
                     
                     ?></td>
-                    <td>edit|delete</td>
+                    <td><a href="categories.php?delete_category_id=<?=$category['id'] ?>">delete</a>|
+                    <a href="category_edit.php?id=<?=$category['id'] ?>">Edit</a></td>
                     </tr>
                     <?php } ?>
           

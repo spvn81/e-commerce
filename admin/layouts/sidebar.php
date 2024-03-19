@@ -62,6 +62,18 @@
           </li>
 
 
+          
+          <li class="nav-item">
+            <a href="products.php" class="nav-link">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Products
+              </p>
+            </a>
+          </li>
+
+
+
 
   
     

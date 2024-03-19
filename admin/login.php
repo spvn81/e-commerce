@@ -25,7 +25,6 @@
       <p class="login-box-msg">Sign in to start your session</p>
       <?php 
 
-session_start();
 
 if(!empty($_SESSION['user_login'])){
   echo "

@@ -168,7 +168,8 @@ $getCategories = getCategories($conn);
                                                     <p><?= $product['product_description'] ?></p>
                                                     <div class="d-flex justify-content-between flex-lg-wrap">
                                                         <p class="text-dark fs-5 fw-bold mb-0"><?= $product['price'] ?></p>
-                                                        <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
+                                                        <a href="javascript:void(0)" class="btn border border-secondary rounded-pill px-3 text-primary"  onclick="addToCart(<?= $product['id'] ?>)">
+                                                            <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -770,3 +771,22 @@ $getCategories = getCategories($conn);
         <!-- Tastimonial End -->
 
 <?php include('includes/footer.php'); ?>
+
+
+<script>
+    function addToCart(id){
+        $.ajax({
+            url:'add_to_cart.php',
+            type:'post',
+            data:{
+                product_id:id
+            },
+            success:function(res){
+                let response = JSON.parse(res)
+                console.log(response.cart)
+                $("#cart_count").text(response.cart_count)
+                
+            }
+        })
+    }
+</script>

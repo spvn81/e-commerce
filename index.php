@@ -150,7 +150,7 @@ $getCategories = getCategories($conn);
                                 <div class="col-lg-12">
                                     <div class="row g-4">
                                     <?php 
-                      
+                               
 
                                         foreach(getProducts($conn) as $product){ ?>
 
@@ -168,8 +168,18 @@ $getCategories = getCategories($conn);
                                                     <p><?= $product['product_description'] ?></p>
                                                     <div class="d-flex justify-content-between flex-lg-wrap">
                                                         <p class="text-dark fs-5 fw-bold mb-0"><?= $product['price'] ?></p>
-                                                        <a href="javascript:void(0)" class="btn border border-secondary rounded-pill px-3 text-primary"  onclick="addToCart(<?= $product['id'] ?>)">
-                                                            <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
+                                                        <a href="javascript:void(0)" class="btn border border-secondary rounded-pill px-3 text-primary add_to_cart_<?= $product['id'] ?>"    onclick="addToCart(<?= $product['id'] ?>)">
+                                                            <i class="fa fa-shopping-bag me-2 text-primary"></i> 
+                                                            
+                                                                <?php 
+                                                                if(!empty($_SESSION['cart'][$product['id']])){
+                                                                    echo "Added";
+                                                                }else{
+                                                                    echo "Add to cart";
+                                                                }
+
+                                                                    ?>
+                                                            </a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -204,7 +214,18 @@ $getCategories = getCategories($conn);
                                                     <p><?= $product['product_description'] ?></p>
                                                     <div class="d-flex justify-content-between flex-lg-wrap">
                                                         <p class="text-dark fs-5 fw-bold mb-0"><?= $product['price'] ?> / kg</p>
-                                                        <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
+                                                        <a href="javascript:void(0)"    class="btn border border-secondary rounded-pill px-3 text-primary add_to_cart_<?= $product['id'] ?>" onclick="addToCart(<?= $product['id'] ?>)" >
+                                                        <i class="fa fa-shopping-bag me-2 text-primary"></i>
+
+                                                        <?php 
+                                                                if(!empty($_SESSION['cart'][$product['id']])){
+                                                                    echo "Added";
+                                                                }else{
+                                                                    echo "Add to cart";
+                                                                }
+
+                                                                    ?>
+                                                            </a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -785,6 +806,7 @@ $getCategories = getCategories($conn);
                 let response = JSON.parse(res)
                 console.log(response.cart)
                 $("#cart_count").text(response.cart_count)
+                $(".add_to_cart_"+id).html('Added')
                 
             }
         })

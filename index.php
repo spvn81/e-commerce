@@ -806,7 +806,7 @@ $getCategories = getCategories($conn);
                 let response = JSON.parse(res)
                 console.log(response.cart)
                 $("#cart_count").text(response.cart_count)
-                $(".add_to_cart_"+id).html('Added')
+                $(".add_to_cart_"+id).html('<i class="fa fa-shopping-bag me-2 text-primary"></i>  Added')
                 
             }
         })

@@ -35,5 +35,15 @@ function getProducts($conn,$category_id=''){
 }
 
 
+function getProductById($conn,$product_id){
+    $sql_products = "SELECT * FROM products WHERE id='$product_id'";
+    $product_ex = mysqli_query($conn,$sql_products);
+    $products_fetch = mysqli_fetch_assoc($product_ex);
+    return $products_fetch;
+
+
+}
+
+
 
 ?>

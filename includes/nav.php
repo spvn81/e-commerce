@@ -37,7 +37,7 @@
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                         <div class="dropdown-menu m-0 bg-secondary rounded-0">
                             <a href="cart.php" class="dropdown-item">Cart</a>
-                            <a href="chackout.php" class="dropdown-item">Chackout</a>
+                            <a href="checkout.php" class="dropdown-item">Checkout</a>
                             <a href="testimonial.php" class="dropdown-item">Testimonial</a>
                             <a href="404.php" class="dropdown-item">404 Page</a>
                         </div>
@@ -62,9 +62,16 @@
                         
                         </span>
                     </a>
-                    <a href="#" class="my-auto">
+                    <?php if(empty($_SESSION['main_user'])){ ?>
+                    <a href="login.php" class="my-auto">
                         <i class="fas fa-user fa-2x"></i>
                     </a>
+                    <?php }else{ ?>
+                        <a href="logout.php" class="my-auto">
+                        <i class="fa fa-power-off fa-2x"></i>
+                    </a>
+
+                   <?php  } ?>
                 </div>
             </div>
         </nav>

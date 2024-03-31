@@ -170,7 +170,7 @@ include('config/conn.php');
                                 
                                 ?></p>
                             </div>
-                            <a href="chackout.php">
+                            <a href="checkout.php">
                             <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" type="button">Proceed Checkout</button>
 
                             </a>

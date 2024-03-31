@@ -1,4 +1,5 @@
-<?php include('includes/header.php'); ?>
+<?php
+include('includes/header.php'); ?>
 
 
 
@@ -31,6 +32,8 @@
 
         <?php 
         include('config/conn.php');
+        $errors = [];
+        $loin_user_fetch='';
 
         if(isset($_POST['submit'])){
       
@@ -46,9 +49,26 @@
                 $password = password_hash($_POST['password'],PASSWORD_BCRYPT);
                 $user_role = 2;
                 $status = 1;
-                $users_sql = "INSERT INTO users (full_name,email,mobile,password,address,town_or_city,country,postcode,user_role,status) 
-                VALUES('$full_name','$email','$mobile','$password','$address','$town_or_city','$country','$postcode','$user_role',$status)";
-                $users_sql_ex = mysqli_query($conn,$users_sql);
+
+                $check_user = "SELECT * FROM users WHERE email='$email'";
+                $check_user_ex  = mysqli_query($conn,$check_user);
+                $check_user_fetch = mysqli_fetch_assoc($check_user_ex);
+                if(empty($check_user_fetch)){
+                    $users_sql = "INSERT INTO users (full_name,email,mobile,password,address,town_or_city,country,postcode,user_role,status) 
+                    VALUES('$full_name','$email','$mobile','$password','$address','$town_or_city','$country','$postcode','$user_role',$status)";
+                    if(mysqli_query($conn,$users_sql)){
+                        $_SESSION['main_user'] = true;
+                        $_SESSION['main_user_email'] = $email;
+                }
+            
+
+
+
+
+                }else{
+                    $errors['user_exist'] =  "User Already exist";
+                    $_SESSION['check_out_login'] = true;
+                }
     
             }
     
@@ -57,7 +77,14 @@
 
         }
 
+         if(!empty($_SESSION['main_user'])){
+            $main_user_email = $_SESSION['main_user_email'];
+            $loin_user = "SELECT * FROM users WHERE email='$main_user_email'";
+            $loin_user_ex  = mysqli_query($conn,$loin_user);
+            $loin_user_fetch = mysqli_fetch_assoc($loin_user_ex);
+         }
 
+  
 
             ?>
 
@@ -66,6 +93,16 @@
         <div class="container-fluid py-5">
             <div class="container py-5">
                 <h1 class="mb-4">Billing details</h1>
+
+              
+                <?php 
+                if(!empty($errors['user_exist'])){
+                    echo $errors['user_exist'];
+                }
+
+              
+
+                ?>
                 <form method="post">
                     <div class="row g-5">
                         <div class="col-md-12 col-lg-6 col-xl-7">
@@ -73,7 +110,7 @@
                                 <div class="col-md-12 col-lg-12">
                                     <div class="form-item w-100">
                                         <label class="form-label my-3">Full Name<sup>*</sup></label>
-                                        <input type="text" name="full_name" class="form-control">
+                                        <input type="text" name="full_name" value="<?= !empty($loin_user_fetch['full_name'])?$loin_user_fetch['full_name']:'' ?>" class="form-control">
                                     </div>
                                 </div>
                          
@@ -81,39 +118,46 @@
                          
                             <div class="form-item">
                                 <label class="form-label my-3">Address <sup>*</sup></label>
-                                <input type="text" class="form-control" name="address" placeholder="House Number Street Name">
+                                <input type="text" class="form-control" value="<?= !empty($loin_user_fetch['address'])?$loin_user_fetch['address']:'' ?>" name="address" placeholder="House Number Street Name">
                             </div>
                             <div class="form-item">
                                 <label class="form-label my-3">Town/City<sup>*</sup></label>
-                                <input type="text" class="form-control" name="town_or_city">
+                                <input type="text" class="form-control"  value="<?= !empty($loin_user_fetch['town_or_city'])?$loin_user_fetch['town_or_city']:'' ?>"  name="town_or_city">
                             </div>
                             <div class="form-item">
                                 <label class="form-label my-3">Country<sup>*</sup></label>
-                                <input type="text" class="form-control" name="country">
+                                <input type="text" class="form-control" name="country"   value="<?= !empty($loin_user_fetch['country'])?$loin_user_fetch['country']:'' ?>">
                             </div>
                             <div class="form-item">
                                 <label class="form-label my-3">Postcode/Zip<sup>*</sup></label>
-                                <input type="text" class="form-control" name="postcode">
+                                <input type="text" class="form-control" name="postcode"    value="<?= !empty($loin_user_fetch['postcode'])?$loin_user_fetch['postcode']:'' ?>">
                             </div>
                             <div class="form-item">
                                 <label class="form-label my-3">Mobile<sup>*</sup></label>
-                                <input type="tel" class="form-control" name="mobile">
+                                <input type="tel" class="form-control" name="mobile" value="<?= !empty($loin_user_fetch['mobile'])?$loin_user_fetch['mobile']:'' ?>">
                             </div>
+                         
                             <div class="form-item">
                                 <label class="form-label my-3">Email Address<sup>*</sup></label>
-                                <input type="email" class="form-control" name="email">
+                                <input type="email" class="form-control" name="email"   value="<?= !empty($loin_user_fetch['email'])?$loin_user_fetch['email']:'' ?>"  <?= !empty($loin_user_fetch['email'])?"readonly":'' ?> >
                             </div>
 
+                            <?php if(empty($loin_user_fetch)){ ?>
                             <div class="form-item">
                                 <label class="form-label my-3">Password<sup>*</sup></label>
                                 <input type="password" class="form-control" name="password" >
                             </div>
 
-
                             <div class="form-check my-3">
                                 <input type="checkbox"  class="form-check-input" id="Account-1" name="accounts" value="Accounts">
                                 <label class="form-check-label" for="Account-1">Create an account?</label>
                             </div>
+
+
+                            <?php } ?>
+
+
+                          
                          
                        
                         

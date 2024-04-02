@@ -31,8 +31,60 @@ if(isset($_POST['submit'])){
    if(password_verify($password,$password_hash)){
     $_SESSION['main_user'] = true;
     $_SESSION['main_user_email'] = $email;
+    $user_id = $sql_fetch_data['id'];
 
-    if(!empty($_SESSION['check_out_login'])){
+
+    $cart_check = "SELECT * FROM cart WHERE user_id='$user_id'";
+    $cart_ex = mysqli_query($conn,$cart_check);
+    $cart_fetch = mysqli_fetch_assoc($cart_ex);
+    if(!empty($cart_fetch)){
+      $cart_id = $cart_fetch['id'];
+    }else{
+    $cart_insert = "INSERT INTO cart (user_id,tax,final_price) VALUES('$user_id',0,0)";
+    $cart_ex = mysqli_query($conn,$cart_insert);
+    $cart_check = "SELECT * FROM cart WHERE user_id='$user_id'";
+    $cart_ex = mysqli_query($conn,$cart_check);
+    $cart_fetch = mysqli_fetch_assoc($cart_ex);
+    $cart_id = $cart_fetch['id'];
+
+    }
+  
+    // echo "<pre>";
+    // print_r($_SESSION);
+    // echo "</pre>";
+
+
+    if(!empty($_SESSION['cart'])){
+      foreach($_SESSION['cart'] as $cart_data){
+        $product_id = $cart_data['product_id'];
+        $price = $cart_data['price'];
+        $quantity = $cart_data['quantity'];
+        $total_price = $price*$quantity;
+
+
+        $check_cart_items = "SELECT * FROM  cart_items WHERE cart_id='$cart_id' AND product_id='$product_id'";
+        $check_cart_items_ex = mysqli_query($conn,$check_cart_items);
+        $check_cart_items_fetch = mysqli_fetch_assoc($check_cart_items_ex);
+        if(!empty($check_cart_items_fetch)){
+          $cart_items_id = $check_cart_items_fetch['id'];
+          $cart_items_update = "UPDATE cart_items SET 
+          'price'='$price',quantity='$quantity',total_price='$total_price' WHERE id='$cart_items_id'";
+          $cart_items_update_ex = mysqli_query($conn,$cart_items_update);
+
+
+        }else{
+          $cart_items_insert = "INSERT INTO cart_items (cart_id,product_id,price,quantity,total_price)
+          VALUES('$cart_id','$product_id','$price','$quantity','$total_price')";
+          $cart_items_insert_ex = mysqli_query($conn,$cart_items_insert);
+        }
+        
+
+
+      }
+    }
+
+
+  if(!empty($_SESSION['check_out_login'])){
         echo "
         <script>
           window.location='checkout.php'

@@ -52,5 +52,34 @@ function getSubtotalByCartId($conn,$cart_id){
 
 }
 
+function getCartItemsCountByCartId($conn,$cart_id){
+    $cart_items_count_sql = "SELECT COUNT(product_id) as cart_count FROM cart_items WHERE cart_id='$cart_id'";
+    $cart_items_count_ex = mysqli_query($conn,$cart_items_count_sql);
+    $cart_items_count_fetch = mysqli_fetch_assoc($cart_items_count_ex);
+
+    return $cart_items_count_fetch['cart_count'];
+
+
+
+}
+
+function getUser($conn){
+    $user_id = $_SESSION['user_id'];
+    $get_user_sql = "SELECT * FROM users WHERE id='$user_id'";
+    $get_user_ex = mysqli_query($conn,$get_user_sql);
+    $get_user_fetch = mysqli_fetch_assoc($get_user_ex);
+    return $get_user_fetch;
+
+}
+
+function getCartIdByUser($conn,$user_id){
+    $get_cart_id_sql = "SELECT id FROM cart WHERE user_id='$user_id'";
+    $get_cart_id_ex = mysqli_query($conn,$get_cart_id_sql);
+    $get_cart_id_fetch = mysqli_fetch_assoc($get_cart_id_ex);
+    return $get_cart_id_fetch['id'];
+}
+
+
+
 
 ?>

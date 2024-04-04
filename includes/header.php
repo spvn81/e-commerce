@@ -1,6 +1,9 @@
 <?php 
 session_start();
+include('config/conn.php');
 include('functions.php');
+$getUser = getUser($conn);
+
 
 ?>
 

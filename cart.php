@@ -58,6 +58,7 @@ include('config/conn.php');
                         </thead>
                         <tbody>
                         <?php
+
                        
                         if(!empty($_SESSION['main_user'])){
                             $user_id = $_SESSION['user_id'];
@@ -68,6 +69,9 @@ include('config/conn.php');
                             $check_cart_items = "SELECT * FROM  cart_items WHERE cart_id='$cart_id'";
                             $check_cart_items_ex = mysqli_query($conn,$check_cart_items);
                             $check_cart_items_fetch = mysqli_fetch_all($check_cart_items_ex,MYSQLI_ASSOC);
+
+                            $getCartItemsCountByCartId = getCartItemsCountByCartId($conn,$cart_id);
+
 
                             foreach($check_cart_items_fetch as $check_cart_item){ 
                                 $product_id  = $check_cart_item['product_id'];
@@ -110,7 +114,7 @@ include('config/conn.php');
                                         <p class="mb-0 mt-4" id="price_<?= $product_id ?>"><?= $total_product_price ?></p>
                                     </td>
                                     <td>
-                                        <button class="btn btn-md rounded-circle bg-light border mt-4" onclick="removeCartProduct('<?= $getProductById['id'] ?>')" >
+                                        <button class="btn btn-md rounded-circle bg-light border mt-4" onclick="removeCartProduct('<?= $getProductById['id'] ?>','<?= $cart_id ?>')" >
                                             <i class="fa fa-times text-danger"></i>
                                         </button>
                                     </td>
@@ -339,19 +343,32 @@ echo $cart_fetch['final_price'];
 
 
 
-    function removeCartProduct(id){
+    function removeCartProduct(id,cart_id=''){
         $.ajax({
             url:'remove_cart_product.php',
             type:'post',
             data:{
-                product_id:id
+                product_id:id,
+                cart_id:cart_id
             },
             success:function(res){
                 let response = JSON.parse(res)
+                console.log(response)
+                if(response.type=='main_user'){
+                    $("#table_of_product_"+id).remove()
+                    $("#cart_count").html(response.cart_count)
+                    $("#subtotal").html(response.sub_total)
+                    $("#total").html(response.total_price)
+
+
+                }else{
                 $("#table_of_product_"+id).remove()
                 $("#cart_count").html(response.cart_count)
                 $("#subtotal").html(response.price_subtotal)
                 $("#total").html(response.price_total)
+                }
+
+            
 
             }
         })

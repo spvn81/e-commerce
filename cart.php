@@ -94,13 +94,13 @@ include('config/conn.php');
                                     <td>
                                         <div class="input-group quantity mt-4" style="width: 100px;">
                                             <div class="input-group-btn">
-                                                <button class="btn btn-sm btn-minus rounded-circle bg-light border" onclick="cartIncrementOrDecrement('<?= $getProductById['id'] ?>',-1)" >
+                                                <button class="btn btn-sm btn-minus rounded-circle bg-light border" onclick="cartIncrementOrDecrement('<?= $getProductById['id'] ?>',-1,'<?= $cart_id ?>')" >
                                                 <i class="fa fa-minus"></i>
                                                 </button>
                                             </div>
                                             <input type="text" class="form-control form-control-sm text-center border-0" value="<?= $check_cart_item['quantity']?>">
                                             <div class="input-group-btn">
-                                                <button class="btn btn-sm btn-plus rounded-circle bg-light border" onclick="cartIncrementOrDecrement('<?= $getProductById['id'] ?>',1)">
+                                                <button class="btn btn-sm btn-plus rounded-circle bg-light border" onclick="cartIncrementOrDecrement('<?= $getProductById['id'] ?>',1,'<?= $cart_id ?>')">
                                                     <i class="fa fa-plus"></i>
                                                 </button>
                                             </div>
@@ -272,21 +272,35 @@ echo $cart_fetch['final_price'];
 
 
         <script>
-            function cartIncrementOrDecrement(product_id,type){
+            function cartIncrementOrDecrement(product_id,type,cart_id=''){
                 $.ajax({
                     url:"cart_increment_or_decrement.php",
                     type:'post',
                     data:{
                         product_id:product_id,
-                        type:type
+                        type:type,
+                        cart_id:cart_id
                     }
                 ,
                 success:function(res){
                     let price;
                     let response = JSON.parse(res)
 
-                    console.log(response.price_subtotal)
-                    if(response.cart[product_id]){
+                    console.log(response)
+                    if(response.type=="with_user"){
+                  
+                        if(!response.cart_items){
+                            $("#table_of_product_"+product_id).remove()
+
+                        }else{
+                        $("#price_"+product_id).html(response.cart_items.total_price)
+                        $("#total").html(response.total_price)
+                        $("#subtotal").html(response.sub_total)
+                        }
+
+
+                    }else{
+                     if(response.cart[product_id]){
                         price = response.cart[product_id].price
                         $("#price_"+product_id).html(price)
 
@@ -297,6 +311,8 @@ echo $cart_fetch['final_price'];
                     $("#subtotal").html(response.price_subtotal)
                      $("#cart_count").html(response.cart_count)
                      $("#total").html(response.price_total)
+                    }
+               
 
 
                 }

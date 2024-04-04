@@ -32,6 +32,7 @@ if(isset($_POST['submit'])){
     $_SESSION['main_user'] = true;
     $_SESSION['main_user_email'] = $email;
     $user_id = $sql_fetch_data['id'];
+    $_SESSION['user_id'] = $user_id;
 
 
     $cart_check = "SELECT * FROM cart WHERE user_id='$user_id'";
@@ -80,7 +81,26 @@ if(isset($_POST['submit'])){
         
 
 
+
+
       }
+      $cart_items_sum = "SELECT SUM(total_price)  as total_price FROM cart_items WHERE cart_id='$cart_id'";
+      $cart_items_sum_ex = mysqli_query($conn,$cart_items_sum);
+      $cart_items_sum_fetch = mysqli_fetch_assoc($cart_items_sum_ex);
+   
+      $total_price = $cart_items_sum_fetch['total_price'];
+
+      $update_cart = "UPDATE cart SET final_price='$total_price' WHERE id='$cart_id'";
+      $update_cart_ex = mysqli_query($conn,$update_cart);
+      unset($_SESSION['cart']);
+      unset($_SESSION['temp_user']);
+      unset($_SESSION['cart_count']);
+      unset($_SESSION['price_subtotal']);
+      unset($_SESSION['price_total']);
+
+
+
+
     }
 
 

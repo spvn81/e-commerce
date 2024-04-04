@@ -58,65 +58,137 @@ include('config/conn.php');
                         </thead>
                         <tbody>
                         <?php
-                        if(!empty($_SESSION['cart'])){
-                        
-                            foreach($_SESSION['cart'] as $cart){
-                            $product_id = $cart['product_id'];
-                            $getProductById = getProductById($conn,$product_id);
-                            $total_product_price = $cart['price'];
-                           
+                       
+                        if(!empty($_SESSION['main_user'])){
+                            $user_id = $_SESSION['user_id'];
+                            $cart_check = "SELECT * FROM cart WHERE user_id='$user_id'";
+                            $cart_ex = mysqli_query($conn,$cart_check);
+                            $cart_fetch = mysqli_fetch_assoc($cart_ex);
+                            $cart_id  = $cart_fetch['id'];
+                            $check_cart_items = "SELECT * FROM  cart_items WHERE cart_id='$cart_id'";
+                            $check_cart_items_ex = mysqli_query($conn,$check_cart_items);
+                            $check_cart_items_fetch = mysqli_fetch_all($check_cart_items_ex,MYSQLI_ASSOC);
 
-                            ?>
-     <tr id="table_of_product_<?= $getProductById['id'] ?>">
-                                <th scope="row">
-                                    <div class="d-flex align-items-center">
-                                        <img src="admin/<?= $getProductById['product_image'] ?>" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
-                                    </div>
-                                </th>
-                                <td>
-                                    <p class="mb-0 mt-4"><?= $getProductById['product_title'] ?></p>
-                                </td>
-                                <td>
-                                    <p class="mb-0 mt-4"><?= $getProductById['price'] ?></p>
-                                </td>
-                                <td>
-                                    <div class="input-group quantity mt-4" style="width: 100px;">
-                                        <div class="input-group-btn">
-                                            <button class="btn btn-sm btn-minus rounded-circle bg-light border" onclick="cartIncrementOrDecrement('<?= $getProductById['id'] ?>',-1)" >
-                                            <i class="fa fa-minus"></i>
-                                            </button>
+                            foreach($check_cart_items_fetch as $check_cart_item){ 
+                                $product_id  = $check_cart_item['product_id'];
+                                $getProductById = getProductById($conn,$product_id);
+                              
+                                $total_product_price = $check_cart_item['total_price'];
+                                
+                                ?>
+                              
+
+
+                                <tr id="table_of_product_<?= $getProductById['id'] ?>">
+                                    <th scope="row">
+                                        <div class="d-flex align-items-center">
+                                            <img src="admin/<?= $getProductById['product_image'] ?>" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
                                         </div>
-                                        <input type="text" class="form-control form-control-sm text-center border-0" value="<?php 
-                                        if(!empty($_SESSION['cart'][$product_id])){
-                                            echo $_SESSION['cart'][$product_id]['quantity'];
-                                        }
-                                        
-                                        ?>">
-                                        <div class="input-group-btn">
-                                            <button class="btn btn-sm btn-plus rounded-circle bg-light border" onclick="cartIncrementOrDecrement('<?= $getProductById['id'] ?>',1)">
-                                                <i class="fa fa-plus"></i>
-                                            </button>
+                                    </th>
+                                    <td>
+                                        <p class="mb-0 mt-4"><?= $getProductById['product_title'] ?></p>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 mt-4"><?= $getProductById['price'] ?></p>
+                                    </td>
+                                    <td>
+                                        <div class="input-group quantity mt-4" style="width: 100px;">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-sm btn-minus rounded-circle bg-light border" onclick="cartIncrementOrDecrement('<?= $getProductById['id'] ?>',-1)" >
+                                                <i class="fa fa-minus"></i>
+                                                </button>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm text-center border-0" value="<?= $check_cart_item['quantity']?>">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-sm btn-plus rounded-circle bg-light border" onclick="cartIncrementOrDecrement('<?= $getProductById['id'] ?>',1)">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <p class="mb-0 mt-4" id="price_<?= $product_id ?>"><?= $total_product_price ?></p>
-                                </td>
-                                <td>
-                                    <button class="btn btn-md rounded-circle bg-light border mt-4" onclick="removeCartProduct('<?= $getProductById['id'] ?>')" >
-                                        <i class="fa fa-times text-danger"></i>
-                                    </button>
-                                </td>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 mt-4" id="price_<?= $product_id ?>"><?= $total_product_price ?></p>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-md rounded-circle bg-light border mt-4" onclick="removeCartProduct('<?= $getProductById['id'] ?>')" >
+                                            <i class="fa fa-times text-danger"></i>
+                                        </button>
+                                    </td>
+                                
+                                </tr>
+
+
+
+
+                         <?php    }
                             
-                            </tr>
 
 
+                        }else{
 
-                      <?php  
-                      
+                            if(!empty($_SESSION['cart'])){
+
+                                foreach($_SESSION['cart'] as $cart){
+                                $product_id = $cart['product_id'];
+                                $getProductById = getProductById($conn,$product_id);
+                                $total_product_price = $cart['price'];
+                               
+    
+                                ?>
+                             <tr id="table_of_product_<?= $getProductById['id'] ?>">
+                                    <th scope="row">
+                                        <div class="d-flex align-items-center">
+                                            <img src="admin/<?= $getProductById['product_image'] ?>" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
+                                        </div>
+                                    </th>
+                                    <td>
+                                        <p class="mb-0 mt-4"><?= $getProductById['product_title'] ?></p>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 mt-4"><?= $getProductById['price'] ?></p>
+                                    </td>
+                                    <td>
+                                        <div class="input-group quantity mt-4" style="width: 100px;">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-sm btn-minus rounded-circle bg-light border" onclick="cartIncrementOrDecrement('<?= $getProductById['id'] ?>',-1)" >
+                                                <i class="fa fa-minus"></i>
+                                                </button>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm text-center border-0" value="<?php 
+                                            if(!empty($_SESSION['cart'][$product_id])){
+                                                echo $_SESSION['cart'][$product_id]['quantity'];
+                                            }
+                                            
+                                            ?>">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-sm btn-plus rounded-circle bg-light border" onclick="cartIncrementOrDecrement('<?= $getProductById['id'] ?>',1)">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 mt-4" id="price_<?= $product_id ?>"><?= $total_product_price ?></p>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-md rounded-circle bg-light border mt-4" onclick="removeCartProduct('<?= $getProductById['id'] ?>')" >
+                                            <i class="fa fa-times text-danger"></i>
+                                        </button>
+                                    </td>
+                                
+                                </tr>
+    
+    
+    
+                          <?php  
+                          
+                        }
+                    
                     }
-                
-                }
+
+                            
+                        }
+
                         
                         ?>
                        
@@ -139,12 +211,20 @@ include('config/conn.php');
                                     <h5 class="mb-0 me-4">Subtotal:</h5>
                                     <p class="mb-0" id="subtotal">
                                         <?php 
+            if(!empty($_SESSION['main_user'])){
+                $getSubtotalByCartId = getSubtotalByCartId($conn,$cart_id);
+                echo $getSubtotalByCartId;
 
-                        if(!empty($_SESSION['price_subtotal'])){
-                            echo $_SESSION['price_subtotal'];
-                        }else{
-                            echo 0;
-                        }
+
+            }else{
+                if(!empty($_SESSION['price_subtotal'])){
+                    echo $_SESSION['price_subtotal'];
+                }else{
+                    echo 0;
+                }
+            }
+
+                     
 
                                 ?>
                                     </p>
@@ -160,11 +240,18 @@ include('config/conn.php');
                             <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
                                 <h5 class="mb-0 ps-4 me-4">Total</h5>
                                 <p class="mb-0 pe-4" id="total"><?php 
-                                 if(!empty($_SESSION['price_total'])){
-                                    echo $_SESSION['price_total'];
-                                 }else{
-                                    echo 0;
-                                 }
+
+if(!empty($_SESSION['main_user'])){
+echo $cart_fetch['final_price'];
+
+}else{
+    if(!empty($_SESSION['price_total'])){
+        echo $_SESSION['price_total'];
+     }else{
+        echo 0;
+     }
+}
+                            
                                 
                                 
                                 

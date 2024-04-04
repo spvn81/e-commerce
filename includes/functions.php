@@ -44,6 +44,13 @@ function getProductById($conn,$product_id){
 
 }
 
+function getSubtotalByCartId($conn,$cart_id){
+    $sql_sum_cart_items = "SELECT SUM(total_price)  as total_price FROM cart_items WHERE cart_id='$cart_id'";
+    $sql_sum_cart_items_ex = mysqli_query($conn,$sql_sum_cart_items);
+    $sql_sum_cart_items_fetch = mysqli_fetch_assoc($sql_sum_cart_items_ex);
+    return $sql_sum_cart_items_fetch['total_price'];
+
+}
 
 
 ?>

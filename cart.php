@@ -57,15 +57,19 @@ include('config/conn.php');
                           </tr>
                         </thead>
                         <tbody>
-                        <?php
+                        <?php 
 
                        
                         if(!empty($_SESSION['main_user'])){
+                            $cart_id  = '';
                             $user_id = $_SESSION['user_id'];
                             $cart_check = "SELECT * FROM cart WHERE user_id='$user_id'";
                             $cart_ex = mysqli_query($conn,$cart_check);
                             $cart_fetch = mysqli_fetch_assoc($cart_ex);
-                            $cart_id  = $cart_fetch['id'];
+                            if(!empty($cart_fetch['id'])){
+                                $cart_id  = $cart_fetch['id'];
+
+                            }
                             $check_cart_items = "SELECT * FROM  cart_items WHERE cart_id='$cart_id'";
                             $check_cart_items_ex = mysqli_query($conn,$check_cart_items);
                             $check_cart_items_fetch = mysqli_fetch_all($check_cart_items_ex,MYSQLI_ASSOC);

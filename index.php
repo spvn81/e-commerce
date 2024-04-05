@@ -175,12 +175,32 @@ $getCategories = getCategories($conn);
                                                             <i class="fa fa-shopping-bag me-2 text-primary"></i> 
                                                             
                                                                 <?php 
-                                                                if(!empty($_SESSION['cart'][$product['id']])){
-                                                                    echo "Added";
-                                                                }else{
-                                                                    echo "Add to cart";
-                                                                }
+    
+if(!empty($_SESSION['main_user'])){
 
+    $product_id = $product['id'];
+    $cart_id = getCartIdByUser($conn,$_SESSION['user_id']);
+    $cart_items = "SELECT * FROM cart_items  WHERE cart_id='$cart_id' AND product_id='$product_id'";
+    $cart_items_ex  = mysqli_query($conn,$cart_items);
+    $cart_items_fetch = mysqli_fetch_assoc($cart_items_ex);
+    if(!empty($cart_items_fetch)){
+        echo "Added";
+
+    }else{
+        echo "Add to cart";
+
+    }
+
+}else{
+    if(!empty($_SESSION['cart'][$product['id']])){
+        echo "Added";
+    }else{
+        echo "Add to cart";
+    }
+
+}
+
+                                                          
                                                                     ?>
                                                             </a>
                                                     </div>
@@ -221,11 +241,38 @@ $getCategories = getCategories($conn);
                                                         <i class="fa fa-shopping-bag me-2 text-primary"></i>
 
                                                         <?php 
-                                                                if(!empty($_SESSION['cart'][$product['id']])){
-                                                                    echo "Added";
+                                                            
+    
+                                                                if(!empty($_SESSION['main_user'])){
+    
+                                                                    $product_id = $product['id'];
+                                                                    $cart_id = getCartIdByUser($conn,$_SESSION['user_id']);
+                                                                    $cart_items = "SELECT * FROM cart_items  WHERE cart_id='$cart_id' AND product_id='$product_id'";
+                                                                    $cart_items_ex  = mysqli_query($conn,$cart_items);
+                                                                    $cart_items_fetch = mysqli_fetch_assoc($cart_items_ex);
+                                                                    if(!empty($cart_items_fetch)){
+                                                                        echo "Added";
+                                                                
+                                                                    }else{
+                                                                        echo "Add to cart";
+                                                                
+                                                                    }
+                                                                
                                                                 }else{
-                                                                    echo "Add to cart";
+                                                                    if(!empty($_SESSION['cart'][$product['id']])){
+                                                                        echo "Added";
+                                                                    }else{
+                                                                        echo "Add to cart";
+                                                                    }
+                                                                
                                                                 }
+
+
+
+
+
+
+
 
                                                                     ?>
                                                             </a>
@@ -807,7 +854,6 @@ $getCategories = getCategories($conn);
             },
             success:function(res){
                 let response = JSON.parse(res)
-                console.log(response.cart)
                 $("#cart_count").text(response.cart_count)
                 $(".add_to_cart_"+id).html('<i class="fa fa-shopping-bag me-2 text-primary"></i>  Added')
                 

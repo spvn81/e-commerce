@@ -56,8 +56,12 @@ function getCartItemsCountByCartId($conn,$cart_id){
     $cart_items_count_sql = "SELECT COUNT(product_id) as cart_count FROM cart_items WHERE cart_id='$cart_id'";
     $cart_items_count_ex = mysqli_query($conn,$cart_items_count_sql);
     $cart_items_count_fetch = mysqli_fetch_assoc($cart_items_count_ex);
+    if(!empty($cart_items_count_fetch['cart_count'])){
+        return $cart_items_count_fetch['cart_count'];
 
-    return $cart_items_count_fetch['cart_count'];
+    }else{
+        return 0;
+    }
 
 
 
@@ -76,7 +80,12 @@ function getCartIdByUser($conn,$user_id){
     $get_cart_id_sql = "SELECT id FROM cart WHERE user_id='$user_id'";
     $get_cart_id_ex = mysqli_query($conn,$get_cart_id_sql);
     $get_cart_id_fetch = mysqli_fetch_assoc($get_cart_id_ex);
-    return $get_cart_id_fetch['id'];
+    if(!empty($get_cart_id_fetch['id'])){
+        return $get_cart_id_fetch['id'];
+
+    }else{
+        return;
+    }
 }
 
 

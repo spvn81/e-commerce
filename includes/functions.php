@@ -68,11 +68,16 @@ function getCartItemsCountByCartId($conn,$cart_id){
 }
 
 function getUser($conn){
-    $user_id = $_SESSION['user_id'];
-    $get_user_sql = "SELECT * FROM users WHERE id='$user_id'";
-    $get_user_ex = mysqli_query($conn,$get_user_sql);
-    $get_user_fetch = mysqli_fetch_assoc($get_user_ex);
-    return $get_user_fetch;
+    if(!empty($_SESSION['user_id'])){
+        $user_id = $_SESSION['user_id'];
+        $get_user_sql = "SELECT * FROM users WHERE id='$user_id'";
+        $get_user_ex = mysqli_query($conn,$get_user_sql);
+        $get_user_fetch = mysqli_fetch_assoc($get_user_ex);
+        return $get_user_fetch;
+    }else{
+        return;
+    }
+    
 
 }
 

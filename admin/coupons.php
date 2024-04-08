@@ -39,6 +39,19 @@
           <?php 
     include('config/conn.php');
 
+    $get_coupons = "SELECT * FROM coupons";
+    $get_coupons_ex = mysqli_query($conn,$get_coupons);
+    $get_coupons_data = mysqli_fetch_all($get_coupons_ex,MYSQLI_ASSOC);
+    if(!empty($_GET['delete_id'])){
+      $delete_id = $_GET['delete_id'];
+      $delete_coupon = "DELETE FROM coupons WHERE id='$delete_id'";
+      if(mysqli_query($conn,$delete_coupon)){
+        echo "<script>
+        window.location='coupons.php';
+      </script>";
+      }
+    }
+
 
 
         ?>
@@ -54,10 +67,27 @@
                       <th>start</th>
                       <th>end</th>
                       <th>min cart</th>
+                      <th>Action</th>
 
                     </tr>
                   </thead>
                   <tbody>
+            <?php foreach($get_coupons_data as $get_coupon){ ?>
+                  <tr>
+                    <td><?= $get_coupon['id'] ?></td>
+                    <td><?= $get_coupon['title'] ?></td>
+                    <td><?= $get_coupon['description'] ?></td>
+                    <td><?= $get_coupon['code'] ?></td>
+                    <td><?= $get_coupon['coupon_type'] ?></td>
+                    <td><?= $get_coupon['discount'] ?></td>
+                    <td><?= $get_coupon['start'] ?></td>
+                    <td><?= $get_coupon['end'] ?></td>
+                    <td><?= $get_coupon['min_cart'] ?></td>
+                    <td><a href="edit_coupon.php?id=<?= $get_coupon['id'] ?>">Edit</a>|<a href="?delete_id=<?= $get_coupon['id'] ?>">Delete</a></td>
+
+                
+                  </tr>
+                  <?php } ?>
               
                
                   </tbody>

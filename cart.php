@@ -206,9 +206,11 @@ include('config/conn.php');
                     </table>
                 </div>
                 <div class="mt-5">
-                    <input type="text" class="border-0 border-bottom rounded me-5 py-3 mb-4" placeholder="Coupon Code">
-                    <button class="btn border-secondary rounded-pill px-4 py-3 text-primary" type="button">Apply Coupon</button>
+                    <input type="text" class="border-0 border-bottom rounded me-5 py-3 mb-4" id="coupon_code" placeholder="Coupon Code">
+                    <button class="btn border-secondary rounded-pill px-4 py-3 text-primary" id="apply_coupon" type="button">Apply Coupon</button>
                 </div>
+                <div id="coupon_status"></div>
+
                 <div class="row g-4 justify-content-end">
                     <div class="col-8"></div>
                     <div class="col-sm-8 col-md-7 col-lg-6 col-xl-4">
@@ -378,4 +380,28 @@ echo $cart_fetch['final_price'];
         })
         
     }
+    $("#apply_coupon").on("click",function(){
+        let coupon_code = $("#coupon_code").val()
+        $.ajax({
+            url:'apply_coupon.php',
+            type:'post',
+            data:{
+                coupon_code:coupon_code 
+            },
+            success:function(res){
+                let response = JSON.parse(res)
+                console.log(response)
+                // coupon_status
+                if(response.status=='ok'){
+                    $("#coupon_status").html(response.msg)
+
+                }else{
+                    $("#coupon_status").html(response.msg)
+                }
+   
+            }
+        })
+       
+      
+    })
         </script>

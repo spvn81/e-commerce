@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 02, 2024 at 12:04 PM
+-- Generation Time: Apr 10, 2024 at 09:53 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 7.4.33
 
@@ -30,7 +30,10 @@ SET time_zone = "+00:00";
 CREATE TABLE `cart` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
+  `total_price` double DEFAULT NULL,
   `tax` double NOT NULL,
+  `coupon_code` varchar(255) DEFAULT NULL,
+  `discount` double DEFAULT NULL,
   `final_price` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -38,8 +41,8 @@ CREATE TABLE `cart` (
 -- Dumping data for table `cart`
 --
 
-INSERT INTO `cart` (`id`, `user_id`, `tax`, `final_price`) VALUES
-(5, 10, 0, 0);
+INSERT INTO `cart` (`id`, `user_id`, `total_price`, `tax`, `coupon_code`, `discount`, `final_price`) VALUES
+(11, 10, NULL, 0, NULL, NULL, 480);
 
 -- --------------------------------------------------------
 
@@ -61,9 +64,11 @@ CREATE TABLE `cart_items` (
 --
 
 INSERT INTO `cart_items` (`id`, `cart_id`, `product_id`, `price`, `quantity`, `total_price`) VALUES
-(16, 5, 14, 100, 1, 100),
-(17, 5, 15, 10, 1, 10),
-(18, 5, 16, 40, 1, 40);
+(41, 11, 14, 100, 1, 100),
+(42, 11, 15, 10, 1, 10),
+(43, 11, 16, 40, 4, 160),
+(44, 11, 17, 200, 1, 200),
+(45, 11, 18, 10, 1, 10);
 
 -- --------------------------------------------------------
 
@@ -87,6 +92,31 @@ INSERT INTO `categories` (`id`, `title`, `slug`, `status`) VALUES
 (17, 'Fruits', 'fruits', 1),
 (18, 'Bread', 'bread', 1),
 (19, 'Meat', 'meat', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `coupons`
+--
+
+CREATE TABLE `coupons` (
+  `id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `code` varchar(255) NOT NULL,
+  `coupon_type` int(1) NOT NULL COMMENT '1=per;2=fixed',
+  `discount` double NOT NULL,
+  `start` date NOT NULL,
+  `end` date NOT NULL,
+  `min_cart` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `coupons`
+--
+
+INSERT INTO `coupons` (`id`, `title`, `description`, `code`, `coupon_type`, `discount`, `start`, `end`, `min_cart`) VALUES
+(2, 'test One', 'test Hello', 'test', 1, 10, '2024-04-08', '2024-05-30', 30);
 
 -- --------------------------------------------------------
 
@@ -169,6 +199,12 @@ ALTER TABLE `categories`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `coupons`
+--
+ALTER TABLE `coupons`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `products`
 --
 ALTER TABLE `products`
@@ -189,19 +225,25 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `cart_items`
 --
 ALTER TABLE `cart_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
+--
+-- AUTO_INCREMENT for table `coupons`
+--
+ALTER TABLE `coupons`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `products`

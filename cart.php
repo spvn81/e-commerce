@@ -58,7 +58,6 @@ include('config/conn.php');
                         </thead>
                         <tbody>
                         <?php 
-
                        
                         if(!empty($_SESSION['main_user'])){
                             $cart_id  = '';
@@ -240,12 +239,16 @@ include('config/conn.php');
                                     </p>
                                 </div>
                                 <div class="d-flex justify-content-between">
-                                    <h5 class="mb-0 me-4">Shipping</h5>
+                                    <h5 class="mb-0 me-4">Coupon</h5>
                                     <div class="">
-                                        <p class="mb-0" id="shipping">Flat rate: 0</p>
+                                        <p class="mb-0" id="coupon_code_applied">
+                                                <?php if(!empty($cart_fetch['coupon_code'])){
+                                                        echo $cart_fetch['coupon_code'].'  '.'-'.$cart_fetch['discount'];
+                                                } ?>
+
+                                        </p>
                                     </div>
                                 </div>
-                                <p class="mb-0 text-end">Shipping to Ukraine.</p>
                             </div>
                             <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
                                 <h5 class="mb-0 ps-4 me-4">Total</h5>
@@ -394,6 +397,9 @@ echo $cart_fetch['final_price'];
                 // coupon_status
                 if(response.status=='ok'){
                     $("#coupon_status").html(response.msg)
+                    $("#coupon_code_applied").html('<b>'+response.cart.coupon_code+'</b>'+'  '+(-response.cart.discount))
+
+            
 
                 }else{
                     $("#coupon_status").html(response.msg)

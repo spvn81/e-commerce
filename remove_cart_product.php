@@ -16,7 +16,6 @@ if(!empty($_SESSION['main_user'])){
    $cart_item_delete_ex  = mysqli_query($conn,$cart_item_delete);
    $count = getCartItemsCountByCartId($conn,$cart_id);
    $getSubtotalByCartId = getSubtotalByCartId($conn,$cart_id);
-
    $cart_update = "UPDATE cart SET final_price='$getSubtotalByCartId' WHERE id='$cart_id'";
    $cart_update_ex  = mysqli_query($conn,$cart_update);
    

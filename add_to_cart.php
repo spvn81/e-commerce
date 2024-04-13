@@ -14,7 +14,7 @@ if(!empty($_SESSION['main_user'])){
     $user_id = $_SESSION['user_id'];
     $cart_id = getCartIdByUser($conn,$user_id);
     if(empty($cart_id)){
-        $cart_sql_insert = "INSERT INTO cart (user_id,tax,final_price) VALUES('$user_id',0,0)";
+        $cart_sql_insert = "INSERT INTO cart (user_id,total_price,tax,final_price) VALUES('$user_id',0,0,0)";
         $cart_sql_ex = mysqli_query($conn,$cart_sql_insert);
     }
     $cart_id = getCartIdByUser($conn,$user_id);
@@ -26,7 +26,7 @@ if(!empty($_SESSION['main_user'])){
         VALUES('$cart_id','$product_id','$price',1,$total_price)";
         $cart_items_insert_ex = mysqli_query($conn,$cart_items_insert_sql);
         $getSubtotalByCartId = getSubtotalByCartId($conn,$cart_id);
-        $cart_update = "UPDATE cart SET final_price='$getSubtotalByCartId' WHERE id='$cart_id'";
+        $cart_update = "UPDATE cart SET total_price='$getSubtotalByCartId',final_price='$getSubtotalByCartId' WHERE id='$cart_id'";
         $cart_update_ex  = mysqli_query($conn,$cart_update);
     }
     $cart_count = getCartItemsCountByCartId($conn,$cart_id);

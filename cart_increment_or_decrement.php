@@ -28,7 +28,7 @@ if(!empty($_SESSION['main_user'])){
     $getSubtotalByCartId = getSubtotalByCartId($conn,$cart_id);
 
 
-    $cart_update = "UPDATE cart SET final_price='$getSubtotalByCartId' WHERE id='$cart_id'";
+    $cart_update = "UPDATE cart SET total_price='$getSubtotalByCartId',final_price='$getSubtotalByCartId' WHERE id='$cart_id'";
     $cart_update_ex  = mysqli_query($conn,$cart_update);
 
 
@@ -37,10 +37,27 @@ if(!empty($_SESSION['main_user'])){
     $cart_items_fetch = mysqli_fetch_assoc($cart_items_ex);
     $sub_total = getSubtotalByCartId($conn,$cart_id);
 
+
+
+    $cart_delete_check = "SELECT *  FROM cart_items  WHERE cart_id='$cart_id'";
+    $cart_delete_check_ex  = mysqli_query($conn,$cart_delete_check);
+    $cart_delete_check_fetch = mysqli_fetch_assoc($cart_delete_check_ex);
+
+    if(empty($cart_delete_check_fetch)){
+
+        $delete_cart = "DELETE FROM cart WHERE id='$cart_id'";
+        $delete_cart_ex = mysqli_query($conn,$delete_cart);
+
+    }
+
+    $total_price =0;
     $sql_cart = "SELECT * FROM cart WHERE id='$cart_id'";
     $sql_cart_ex  = mysqli_query($conn,$sql_cart);
     $sql_cart_fetch = mysqli_fetch_assoc($sql_cart_ex);
-    $total_price = $sql_cart_fetch['final_price'];
+    if(!empty($sql_cart_fetch['final_price'])){
+        $total_price = $sql_cart_fetch['final_price'];
+
+    }
 
 
 

@@ -239,7 +239,9 @@ include('config/conn.php');
                                     </p>
                                 </div>
                                 <div class="d-flex justify-content-between">
+                                
                                     <h5 class="mb-0 me-4">Coupon</h5>
+                               
                                     <div class="">
                                         <p class="mb-0" id="coupon_code_applied">
                                                 <?php if(!empty($cart_fetch['coupon_code'])){
@@ -247,8 +249,19 @@ include('config/conn.php');
                                                 } ?>
 
                                         </p>
+                                        <?php if(!empty($cart_fetch['coupon_code'])){?>
+
+                                        <p class="mb-0" id="remove_coupon" style="color: red;">
+                                                    Remove
+                                        
+                                        </p>
+
+                                    <?php   } ?>
+
                                     </div>
                                 </div>
+                               
+
                             </div>
                             <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
                                 <h5 class="mb-0 ps-4 me-4">Total</h5>

@@ -249,14 +249,14 @@ include('config/conn.php');
                                                 } ?>
 
                                         </p>
-                                        <?php if(!empty($cart_fetch['coupon_code'])){?>
+                                        <div id="remove_coupon_btn">
+                                                <?php if(!empty($cart_fetch['coupon_code'])){?>
 
-                                        <p class="mb-0" id="remove_coupon" style="color: red;">
-                                                    Remove
-                                        
-                                        </p>
+                                                <button  class="btn btn-danger">Remove</button>
 
-                                    <?php   } ?>
+                                                <?php   } ?>
+                                        </div>
+                           
 
                                     </div>
                                 </div>
@@ -411,8 +411,9 @@ echo $cart_fetch['final_price'];
                 if(response.status=='ok'){
                     $("#coupon_status").html(response.msg)
                     $("#coupon_code_applied").html('<b>'+response.cart.coupon_code+'</b>'+'  '+(-response.cart.discount))
+                    $("#remove_coupon_btn").html('<button  class="btn btn-danger">Remove</button>')
+                    $("#total").html(response.cart.final_price)
 
-            
 
                 }else{
                     $("#coupon_status").html(response.msg)
@@ -422,5 +423,25 @@ echo $cart_fetch['final_price'];
         })
        
       
+    })
+    $("#remove_coupon_btn").on("click",function(){
+     
+        $.ajax({
+            url:'remove_coupon.php',
+            type:'post',
+            success:function(res){
+                let response = JSON.parse(res)
+                console.log(response)
+                if(response.status=='ok'){
+                    $("#remove_coupon_btn").html('')
+                    $("#coupon_code_applied").html('<b>'+response.cart.coupon_code+'</b>'+'  '+(-response.cart.discount))
+                    $("#total").html(response.cart.final_price)
+
+
+                }
+
+            }
+        })
+       
     })
         </script>

@@ -22,7 +22,6 @@ if(!empty($coupons)){
      
         $final_price =$total_price-$fnl_discount+$tax;
         $cart_update = "UPDATE cart SET final_price='$final_price',coupon_code='$coupon_code',discount='$fnl_discount',total_price='$total_price' WHERE id='$cart_id'";
-        
         if(mysqli_query($conn,$cart_update)){
             }
         $cart_update_ex  = mysqli_query($conn,$cart_update);

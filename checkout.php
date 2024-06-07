@@ -1,6 +1,10 @@
 <?php
-include('includes/header.php'); ?>
+include('includes/header.php'); 
+if(!isset($_SESSION['main_user'])){
+    echo "<script>window.location='login.php'</script>";
+}
 
+?>
 
 
     

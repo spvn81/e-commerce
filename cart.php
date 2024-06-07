@@ -278,15 +278,17 @@ echo $cart_fetch['final_price'];
      }
 }
                             
-                                
-                                
-                                
-                                ?></p>
+                            ?></p>
                             </div>
+                            <?php if(isset($_SESSION['main_user'])){ ?>
                             <a href="checkout.php">
                             <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" type="button">Proceed Checkout</button>
-
                             </a>
+                            <?php }else{?>
+                                <a href="login.php">
+                                   <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" type="button">Proceed Checkout</button>
+                                   </a>
+                           <?php  } ?>
                         </div>
                     </div>
                 </div>
